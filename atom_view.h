@@ -9,6 +9,8 @@ class AtomView : public View {
 public:
   AtomView();
   void drawRect(KDContext * ctx, KDRect rect) const override;
+private:
+  void drawAtom(KDContext * ctx, uint8_t id) const;
 };
 
 }
