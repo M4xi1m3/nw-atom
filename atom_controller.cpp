@@ -10,12 +10,6 @@ AtomController::AtomController() :
 }
 
 bool AtomController::handleEvent(Ion::Events::Event e) {
-  
-  if (e == Ion::Events::EXE) {
-    AppsContainer::sharedAppsContainer()->redrawWindow();
-    return true;
-  }
-  
   if (e == Ion::Events::Right) {
     m_atomView.handleRight();
     AppsContainer::sharedAppsContainer()->redrawWindow();
