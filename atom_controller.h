@@ -10,6 +10,7 @@ class AtomController : public ViewController {
 public:
   AtomController();
   View * view() override;
+  bool handleEvent(Ion::Events::Event e) override;
 private:
   AtomView m_atomView;
 };

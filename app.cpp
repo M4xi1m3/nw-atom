@@ -37,11 +37,6 @@ void App::willBecomeInactive() {
   ::App::willBecomeInactive();
 }
 
-
-bool App::processEvent(Ion::Events::Event e) {
-  return ::App::processEvent(e);
-}
-
 App::App(Container * container, Snapshot * snapshot) :
   ::App(snapshot, &m_atomController),
   m_appsContainer((AppsContainer*) container)

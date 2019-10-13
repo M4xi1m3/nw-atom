@@ -21,7 +21,6 @@ public:
     void reset() override;
     Descriptor * descriptor() override;
   };
-  bool processEvent(Ion::Events::Event) override;
   virtual void didBecomeActive(Window * window);
   virtual void willBecomeInactive();
 private:
