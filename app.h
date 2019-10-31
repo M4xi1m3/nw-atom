@@ -2,8 +2,8 @@
 #define ATOM_APP_H
 
 #include <escher.h>
+#include <apps/apps_container.h>
 #include "atom_controller.h"
-#include "../apps_container.h"
 
 namespace Atom {
 

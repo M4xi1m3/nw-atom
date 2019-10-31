@@ -1,7 +1,8 @@
 #include "app.h"
-#include "../apps_container.h"
 #include "atom_icon.h"
-#include "../i18n.h"
+
+#include <apps/i18n.h>
+#include <apps/apps_container.h>
 
 namespace Atom {
 

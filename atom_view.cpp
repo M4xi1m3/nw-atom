@@ -1,9 +1,12 @@
 #include "atom_view.h"
-#include "atom_defs.h"
 #include <assert.h>
 #include <string.h>
 #include <poincare/integer.h>
 #include <poincare/number.h>
+
+
+#include <apps/i18n.h>
+#include "atom_defs.h"
 
 namespace Atom {
 
@@ -159,7 +162,7 @@ void AtomView::drawRect(KDContext * ctx, KDRect rect) const {
   Poincare::Integer(atomsdefs[cursor_pos].neutrons + atomsdefs[cursor_pos].num).serialize(nucleons, 4);
   
   ctx->drawString(atomsdefs[cursor_pos].symbol, KDPoint(73, 23), KDFont::LargeFont);
-  ctx->drawString(atomsdefs[cursor_pos].name, KDPoint(110, 27), KDFont::SmallFont);
+  ctx->drawString(I18n::translate(atomsdefs[cursor_pos].name), KDPoint(110, 27), KDFont::SmallFont);
   ctx->drawString(nucleons, KDPoint(50, 18), KDFont::SmallFont);
   ctx->drawString(protons, KDPoint(50, 31), KDFont::SmallFont);
   

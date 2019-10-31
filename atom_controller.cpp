@@ -1,5 +1,5 @@
 #include "atom_controller.h"
-#include "../apps_container.h"
+#include <apps/apps_container.h>
 
 namespace Atom {
 
