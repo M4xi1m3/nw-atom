@@ -34,7 +34,7 @@ struct AtomDef {
   double electroneg;
 };
 
-AtomDef atomsdefs[ATOM_NUMS] = {
+const AtomDef atomsdefs[ATOM_NUMS] = {
   {  1,  0,  0, REACTIVE_NONMETAL       , "Hydrogen"     , "H"   ,   0, 1.00784     , 2.2   },
   {  2, 17,  0, NOBLE_GAS               , "Helium"       , "He"  ,   2, 4.002602    , -1    },
   
@@ -351,8 +351,17 @@ void AtomView::drawRect(KDContext * ctx, KDRect rect) const {
   buffer[2] = 'i';
   buffer[3] = ':';
   
-  num = Poincare::Number::FloatNumber(atomsdefs[cursor_pos].electroneg).serialize(buffer + 5, 11);
-  buffer[5  + num] = 0;
+  if (atomsdefs[cursor_pos].electroneg == -1) {
+    buffer[5] = 'N';
+    buffer[6] = '/';
+    buffer[7] = 'A';
+    buffer[8] = 0;
+  } else {
+    num = Poincare::Number::FloatNumber(atomsdefs[cursor_pos].electroneg).serialize(buffer + 5, 11);
+    buffer[5  + num] = 0;
+  }
+  
+
   
   ctx->drawString(buffer, KDPoint(8, 186), KDFont::SmallFont);
 }
