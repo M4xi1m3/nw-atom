@@ -34,6 +34,26 @@ bool AtomController::handleEvent(Ion::Events::Event e) {
     return true;
   }
   
+  if (e == Ion::Events::Copy){
+    AppsContainer::sharedAppsContainer()->redrawWindow();
+    m_atomView.handleCopy();
+    return true;
+  }
+  
+  if (e == Ion::Events::OK || e == Ion::Events::EXE){
+    if (m_atomView.handleOK()) {
+      AppsContainer::sharedAppsContainer()->redrawWindow();
+      return true;
+    }
+  }
+  
+  if (e == Ion::Events::Back){
+    if (m_atomView.handleBack()) {
+      AppsContainer::sharedAppsContainer()->redrawWindow();
+      return true;
+    }
+  }
+  
   return false;
 }
 

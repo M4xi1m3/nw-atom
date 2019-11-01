@@ -14,6 +14,9 @@ public:
   void handleLeft();
   void handleUp();
   void handleDown();
+  void handleCopy();
+  bool handleOK();
+  bool handleBack();
 private:
   void drawAtom(KDContext * ctx, uint8_t id) const;
 };

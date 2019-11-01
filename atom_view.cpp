@@ -3,10 +3,13 @@
 #include <string.h>
 #include <poincare/integer.h>
 #include <poincare/number.h>
+#include <escher/palette.h>
 
 
 #include <apps/i18n.h>
 #include "atom_defs.h"
+
+#define ATOM_VIEW_VARS_NUM 4
 
 namespace Atom {
 
@@ -71,6 +74,8 @@ void AtomView::drawAtom(KDContext * ctx, uint8_t id) const {
 
 uint8_t cursor_pos = 2;
 bool partial_draw = false;
+bool copy_mode = false;
+uint8_t copy_cursor_pos = 0;
 
 void AtomView::handleLeft() {
   if (cursor_pos > 0) {
@@ -89,6 +94,17 @@ void AtomView::handleRight() {
 }
 
 void AtomView::handleUp() {
+  
+  if (copy_mode) {
+    
+    if (copy_cursor_pos > 0)
+      copy_cursor_pos--;
+    
+    partial_draw = true;
+    markRectAsDirty(bounds());
+    return;
+  }
+  
   uint8_t curr_x = atomsdefs[cursor_pos].x;
   uint8_t curr_y = atomsdefs[cursor_pos].y;
   bool updated = false;
@@ -110,6 +126,17 @@ void AtomView::handleUp() {
 }
 
 void AtomView::handleDown() {
+  
+  if (copy_mode) {
+    
+    if (copy_cursor_pos < ATOM_VIEW_VARS_NUM-1)
+      copy_cursor_pos++;
+    
+    partial_draw = true;
+    markRectAsDirty(bounds());
+    return;
+  }
+  
   uint8_t curr_x = atomsdefs[cursor_pos].x;
   uint8_t curr_y = atomsdefs[cursor_pos].y;
   bool updated = false;
@@ -130,6 +157,53 @@ void AtomView::handleDown() {
   }
 }
 
+bool AtomView::handleOK() {
+  if (copy_mode) {
+    copy_mode = false;
+    char buffer[12];
+    
+    switch(copy_cursor_pos) {
+    case 0:
+      Poincare::Integer(atomsdefs[cursor_pos].num).serialize(buffer, 4);
+      break;
+    case 1:
+      Poincare::Integer(atomsdefs[cursor_pos].neutrons + atomsdefs[cursor_pos].num).serialize(buffer, 4);
+      break;
+    case 2:
+      Poincare::Number::FloatNumber(atomsdefs[cursor_pos].mass).serialize(buffer, 11);
+      break;
+    case 3:
+      Poincare::Number::FloatNumber(atomsdefs[cursor_pos].electroneg).serialize(buffer, 11);
+      break;
+    default:
+      break;
+    }
+    
+    Clipboard::sharedClipboard()->store(buffer);
+    partial_draw = true;
+    markRectAsDirty(bounds());
+    return true;
+  }
+  return false;
+}
+
+void AtomView::handleCopy() {
+  copy_mode = true;
+  copy_cursor_pos = 0;
+  partial_draw = true;
+  markRectAsDirty(bounds());
+}
+
+bool AtomView::handleBack() {
+  if (copy_mode) {
+    copy_mode = false;
+    partial_draw = true;
+    markRectAsDirty(bounds());
+    return true;
+  }
+  return false;
+}
+
 void AtomView::drawRect(KDContext * ctx, KDRect rect) const {
   if (partial_draw) {
     partial_draw = false;
@@ -143,12 +217,14 @@ void AtomView::drawRect(KDContext * ctx, KDRect rect) const {
     AtomView::drawAtom(ctx, i);
   }
   
-  if (atomsdefs[cursor_pos].y >= 7) {
-    ctx->strokeRect(KDRect(6 + atomsdefs[cursor_pos].x * 17, 15 + atomsdefs[cursor_pos].y * 17, 18, 18), KDColor::RGB24(0x000000));
-    ctx->strokeRect(KDRect(7 + atomsdefs[cursor_pos].x * 17, 16 + atomsdefs[cursor_pos].y * 17, 16, 16), KDColor::RGB24(0x000000));
-  } else {
-    ctx->strokeRect(KDRect(6 + atomsdefs[cursor_pos].x * 17, 6 + atomsdefs[cursor_pos].y * 17, 18, 18), KDColor::RGB24(0x000000));
-    ctx->strokeRect(KDRect(7 + atomsdefs[cursor_pos].x * 17, 7 + atomsdefs[cursor_pos].y * 17, 16, 16), KDColor::RGB24(0x000000));
+  if (!copy_mode) {
+    if (atomsdefs[cursor_pos].y >= 7) {
+      ctx->strokeRect(KDRect(6 + atomsdefs[cursor_pos].x * 17, 15 + atomsdefs[cursor_pos].y * 17, 18, 18), KDColor::RGB24(0x000000));
+      ctx->strokeRect(KDRect(7 + atomsdefs[cursor_pos].x * 17, 16 + atomsdefs[cursor_pos].y * 17, 16, 16), KDColor::RGB24(0x000000));
+    } else {
+      ctx->strokeRect(KDRect(6 + atomsdefs[cursor_pos].x * 17, 6 + atomsdefs[cursor_pos].y * 17, 18, 18), KDColor::RGB24(0x000000));
+      ctx->strokeRect(KDRect(7 + atomsdefs[cursor_pos].x * 17, 7 + atomsdefs[cursor_pos].y * 17, 16, 16), KDColor::RGB24(0x000000));
+    }
   }
   
   ctx->fillRect(KDRect(48,  99, 2, 61), KDColor::RGB24(0x525552));
@@ -163,8 +239,18 @@ void AtomView::drawRect(KDContext * ctx, KDRect rect) const {
   
   ctx->drawString(atomsdefs[cursor_pos].symbol, KDPoint(73, 23), KDFont::LargeFont);
   ctx->drawString(I18n::translate(atomsdefs[cursor_pos].name), KDPoint(110, 27), KDFont::SmallFont);
-  ctx->drawString(nucleons, KDPoint(50, 18), KDFont::SmallFont);
-  ctx->drawString(protons, KDPoint(50, 31), KDFont::SmallFont);
+  
+  // , KDColorBlack, Palette::SelectDark
+  
+  if (copy_mode && copy_cursor_pos == 0)
+    ctx->drawString(nucleons, KDPoint(50, 17), KDFont::SmallFont, KDColorBlack, Palette::SelectDark);
+  else
+    ctx->drawString(nucleons, KDPoint(50, 17), KDFont::SmallFont);
+    
+  if (copy_mode && copy_cursor_pos == 1)
+    ctx->drawString(protons, KDPoint(50, 31), KDFont::SmallFont, KDColorBlack, Palette::SelectDark);
+  else
+    ctx->drawString(protons, KDPoint(50, 31), KDFont::SmallFont);
   
   char buffer[30];
   
@@ -177,7 +263,10 @@ void AtomView::drawRect(KDContext * ctx, KDRect rect) const {
   int num = Poincare::Number::FloatNumber(atomsdefs[cursor_pos].mass).serialize(buffer + 5, 11);
   buffer[5  + num] = 0;
   
-  ctx->drawString(buffer, KDPoint(8, 174), KDFont::SmallFont);
+  if (copy_mode && copy_cursor_pos == 2)
+    ctx->drawString(buffer, KDPoint(8, 174), KDFont::SmallFont, KDColorBlack, Palette::SelectDark);
+  else
+    ctx->drawString(buffer, KDPoint(8, 174), KDFont::SmallFont);
   
   
   memset(buffer, ' ', 24);
@@ -199,9 +288,11 @@ void AtomView::drawRect(KDContext * ctx, KDRect rect) const {
     buffer[5  + num] = 0;
   }
   
-
   
-  ctx->drawString(buffer, KDPoint(8, 186), KDFont::SmallFont);
+  if (copy_mode && copy_cursor_pos == 3)
+    ctx->drawString(buffer, KDPoint(8, 188), KDFont::SmallFont, KDColorBlack, Palette::SelectDark);
+  else
+    ctx->drawString(buffer, KDPoint(8, 188), KDFont::SmallFont);
 }
 
 }
