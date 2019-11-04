@@ -252,15 +252,15 @@ void AtomView::drawRect(KDContext * ctx, KDRect rect) const {
   else
     ctx->drawString(protons, KDPoint(50, 31), KDFont::SmallFont);
   
-  char buffer[30];
+  char buffer[20];
   
-  memset(buffer, ' ', 29);
-  buffer[29] = 0;
+  memset(buffer, ' ', 19);
+  buffer[19] = 0;
   
   buffer[0] = 'M';
   buffer[1] = ':';
   
-  int num = Poincare::Number::FloatNumber(atomsdefs[cursor_pos].mass).serialize(buffer + 5, 11);
+  int num = Poincare::Number::FloatNumber(atomsdefs[cursor_pos].mass).serialize(buffer + 5, 13);
   buffer[5  + num] = 0;
   
   if (copy_mode && copy_cursor_pos == 2)
@@ -269,8 +269,8 @@ void AtomView::drawRect(KDContext * ctx, KDRect rect) const {
     ctx->drawString(buffer, KDPoint(8, 174), KDFont::SmallFont);
   
   
-  memset(buffer, ' ', 24);
-  buffer[24] = 0;
+  memset(buffer, ' ', 19);
+  buffer[19] = 0;
   
   
   buffer[0] = 'K';
@@ -284,7 +284,7 @@ void AtomView::drawRect(KDContext * ctx, KDRect rect) const {
     buffer[7] = 'A';
     buffer[8] = 0;
   } else {
-    num = Poincare::Number::FloatNumber(atomsdefs[cursor_pos].electroneg).serialize(buffer + 5, 11);
+    num = Poincare::Number::FloatNumber(atomsdefs[cursor_pos].electroneg).serialize(buffer + 5, 13);
     buffer[5  + num] = 0;
   }
   
