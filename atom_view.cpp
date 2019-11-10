@@ -27,6 +27,8 @@ public:
   constexpr static KDColor ReactiveNonmetal = KDColor::RGB24(0x00ee00);
   constexpr static KDColor NobleGas = KDColor::RGB24(0x8baaff);
   
+  constexpr static KDColor TableLines = KDColor::RGB24(0x323532);
+  
   constexpr static KDColor AtomColor[] = {
     Unknown, AlkaliMetal, AlkaliEarthMetal, Lanthanide, Actinide, TransitionMetal,
     PostTransitionMetal, Metalloid, Halogen, ReactiveNonmetal, NobleGas
@@ -48,14 +50,14 @@ void AtomView::drawAtom(KDContext * ctx, uint8_t id) const {
 
   if (atomsdefs[id].y >= 7) {
     ctx->fillRect(KDRect(6 + atomsdefs[id].x * 17, 15 + atomsdefs[id].y * 17, 18, 18), fill);
-    ctx->strokeRect(KDRect(6 + atomsdefs[id].x * 17, 15 + atomsdefs[id].y * 17, 18, 18), KDColor::RGB24(0x525552));
+    ctx->strokeRect(KDRect(6 + atomsdefs[id].x * 17, 15 + atomsdefs[id].y * 17, 18, 18), AtomPalette::TableLines);
     
-    ctx->drawString(atomsdefs[id].symbol, KDPoint(8 + atomsdefs[id].x * 17, 17 + atomsdefs[id].y * 17), KDFont::SmallFont, KDColor::RGB24(0x222222), fill);
+    ctx->drawString(atomsdefs[id].symbol, KDPoint(8 + atomsdefs[id].x * 17, 17 + atomsdefs[id].y * 17), KDFont::SmallFont, KDColorBlack, fill);
   } else {
     ctx->fillRect(KDRect(6 + atomsdefs[id].x * 17, 6 + atomsdefs[id].y * 17, 18, 18), fill);
-    ctx->strokeRect(KDRect(6 + atomsdefs[id].x * 17, 6 + atomsdefs[id].y * 17, 18, 18), KDColor::RGB24(0x525552));
+    ctx->strokeRect(KDRect(6 + atomsdefs[id].x * 17, 6 + atomsdefs[id].y * 17, 18, 18), AtomPalette::TableLines);
     
-    ctx->drawString(atomsdefs[id].symbol, KDPoint(8 + atomsdefs[id].x * 17, 8 + atomsdefs[id].y * 17), KDFont::SmallFont, KDColor::RGB24(0x222222), fill);
+    ctx->drawString(atomsdefs[id].symbol, KDPoint(8 + atomsdefs[id].x * 17, 8 + atomsdefs[id].y * 17), KDFont::SmallFont, KDColorBlack, fill);
   }
 }
 
@@ -206,17 +208,17 @@ void AtomView::drawRect(KDContext * ctx, KDRect rect) const {
   
   if (!copy_mode) {
     if (atomsdefs[cursor_pos].y >= 7) {
-      ctx->strokeRect(KDRect(6 + atomsdefs[cursor_pos].x * 17, 15 + atomsdefs[cursor_pos].y * 17, 18, 18), KDColor::RGB24(0x000000));
-      ctx->strokeRect(KDRect(7 + atomsdefs[cursor_pos].x * 17, 16 + atomsdefs[cursor_pos].y * 17, 16, 16), KDColor::RGB24(0x000000));
+      ctx->strokeRect(KDRect(6 + atomsdefs[cursor_pos].x * 17, 15 + atomsdefs[cursor_pos].y * 17, 18, 18), KDColorBlack);
+      ctx->strokeRect(KDRect(7 + atomsdefs[cursor_pos].x * 17, 16 + atomsdefs[cursor_pos].y * 17, 16, 16), KDColorBlack);
     } else {
-      ctx->strokeRect(KDRect(6 + atomsdefs[cursor_pos].x * 17, 6 + atomsdefs[cursor_pos].y * 17, 18, 18), KDColor::RGB24(0x000000));
-      ctx->strokeRect(KDRect(7 + atomsdefs[cursor_pos].x * 17, 7 + atomsdefs[cursor_pos].y * 17, 16, 16), KDColor::RGB24(0x000000));
+      ctx->strokeRect(KDRect(6 + atomsdefs[cursor_pos].x * 17, 6 + atomsdefs[cursor_pos].y * 17, 18, 18), KDColorBlack);
+      ctx->strokeRect(KDRect(7 + atomsdefs[cursor_pos].x * 17, 7 + atomsdefs[cursor_pos].y * 17, 16, 16), KDColorBlack);
     }
   }
   
-  ctx->fillRect(KDRect(48,  99, 2, 61), KDColor::RGB24(0x525552));
-  ctx->fillRect(KDRect(48, 141, 9,  2), KDColor::RGB24(0x525552));
-  ctx->fillRect(KDRect(48, 158, 9,  2), KDColor::RGB24(0x525552));
+  ctx->fillRect(KDRect(48,  99, 2, 61), AtomPalette::TableLines);
+  ctx->fillRect(KDRect(48, 141, 9,  2), AtomPalette::TableLines);
+  ctx->fillRect(KDRect(48, 158, 9,  2), AtomPalette::TableLines);
 
   char protons[4];
   char nucleons[4];
