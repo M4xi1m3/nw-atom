@@ -36,6 +36,7 @@ public:
 };
 
 constexpr KDColor AtomPalette::AtomColor[];
+constexpr KDColor AtomPalette::TableLines;
 #endif
 
 namespace Atom {
