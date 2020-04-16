@@ -1,7 +1,7 @@
 apps += Atom::App
 app_headers += apps/atom/app.h
 
-app_src += $(addprefix apps/atom/,\
+apps_src += $(addprefix apps/atom/,\
   app.cpp \
   atom_controller.cpp \
   atom_view.cpp \
