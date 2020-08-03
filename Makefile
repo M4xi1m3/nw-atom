@@ -9,14 +9,6 @@ apps_src += $(addprefix apps/atom/,\
 
 app_images += apps/atom/atom_icon.png
 
-i18n_files += $(addprefix apps/atom/,\
-	base.de.i18n\
-	base.en.i18n\
-	base.es.i18n\
-	base.fr.i18n\
-	base.pt.i18n\
-	base.it.i18n\
-	base.nl.i18n\
-)
+i18n_files += $(call i18n_with_universal_for,atom/base)
 
 $(eval $(call depends_on_image,apps/atom/app.cpp,apps/atom/atom_icon.png))
