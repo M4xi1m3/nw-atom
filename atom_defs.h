@@ -154,7 +154,7 @@ const AtomDef atomsdefs[ATOM_NUMS] = {
   {107,  6,  6, TRANSITION_METAL        , I18n::Message::AtomName_Bohrium      , "Bh"  , 163, 270         , -1    },
   {108,  7,  6, TRANSITION_METAL        , I18n::Message::AtomName_Hassium      , "Hs"  , 169, 277         , -1    },
   {109,  8,  6, UNKNOWN                 , I18n::Message::AtomName_Meitnerium   , "Mt"  , 169, 278         , -1    },
-  {110,  9,  6, UNKNOWN                 , I18n::Message::AtomName_Damstadtium  , "Ds"  , 171, 281         , -1    },
+  {110,  9,  6, UNKNOWN                 , I18n::Message::AtomName_Darmstadtium , "Ds"  , 171, 281         , -1    },
   {111, 10,  6, UNKNOWN                 , I18n::Message::AtomName_Roentgenium  , "Rg"  , 171, 282         , -1    },
   {112, 11,  6, POST_TRANSITION_METAL   , I18n::Message::AtomName_Copernicium  , "Cn"  , 173, 285         , -1    },
   {113, 12,  6, UNKNOWN                 , I18n::Message::AtomName_Nihonium     , "Nh"  , 173, 286         , -1    },
